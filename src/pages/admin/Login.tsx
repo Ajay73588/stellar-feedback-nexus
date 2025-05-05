@@ -66,11 +66,8 @@ const AdminLogin = () => {
         throw new Error(data.message || "Login failed");
       }
 
-      login({
-        id: data.admin.id,
-        name: data.admin.username,
-        role: "admin",
-      });
+      // Modified this part to pass the correct arguments to the login function
+      login(data.admin.username, values.password, "admin");
 
       toast({
         title: "Login successful",
