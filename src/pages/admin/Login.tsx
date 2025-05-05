@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
-import { StarBackground } from "@/components/StarBackground";
+import StarBackground from "@/components/StarBackground";
 
 const formSchema = z.object({
   username: z.string().min(2, {

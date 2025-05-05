@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { StarRating } from "@/components/StarRating";
+import StarRating from "@/components/StarRating";
 
 interface Customer {
   id: number;
@@ -209,7 +208,7 @@ const AdminDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="mb-2">
-                      <StarRating rating={feedback.rating} maxRating={5} />
+                      <StarRating initialRating={feedback.rating} />
                     </div>
                     <p className="mb-4">{feedback.review_text}</p>
                   </CardContent>
