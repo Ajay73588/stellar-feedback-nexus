@@ -74,6 +74,7 @@ const AdminLogin = () => {
         description: "Welcome back, admin!",
       });
 
+      // Make sure this path exactly matches what you have in your App.tsx routes
       navigate("/admin/dashboard");
     } catch (error) {
       console.error("Login error:", error);
