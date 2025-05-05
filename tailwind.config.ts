@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,6 +53,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+                space: {
+                    'dark': '#1A1F2C',
+                    'purple': '#9b87f5',
+                    'light-purple': '#D6BCFA',
+                    'blue': '#1EAEDB',
+                },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,12 +91,26 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+                'twinkle': {
+                    '0%, 100%': { opacity: '0.2' },
+                    '50%': { opacity: '0.8' },
+                },
+                'float': {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+                'twinkle': 'twinkle 3s ease-in-out infinite',
+                'float': 'float 6s ease-in-out infinite'
+			},
+            backgroundImage: {
+                'space-gradient': 'linear-gradient(to bottom, #1A1F2C, #0f1218)',
+                'purple-glow': 'radial-gradient(circle, rgba(155, 135, 245, 0.15) 0%, transparent 70%)',
+            },
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
