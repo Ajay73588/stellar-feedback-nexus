@@ -13,6 +13,24 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
+// Customer Pages
+import CustomerLogin from "./pages/customer/Login";
+import CustomerRegister from "./pages/customer/Register";
+import CustomerProducts from "./pages/customer/products";
+import CustomerCompanies from "./pages/customer/companies";
+import CustomerFeedback from "./pages/customer/feedback";
+import CustomerMyFeedbacks from "./pages/customer/my-feedbacks";
+
+// Company Pages
+import CompanyLogin from "./pages/company/Login";
+import CompanyRegister from "./pages/company/Register";
+import CompanyDashboard from "./pages/company/dashboard";
+import CompanyFeedbacks from "./pages/company/feedbacks";
+
+// Admin Pages
+import AdminLogin from "./pages/admin/Login";
+import AdminDashboard from "./pages/admin/Dashboard";
+
 // Protected route wrapper
 const ProtectedRoute = ({ 
   children, 
@@ -39,7 +57,51 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       
-      {/* Add your protected routes here */}
+      {/* Customer Routes */}
+      <Route path="/customer/login" element={<CustomerLogin />} />
+      <Route path="/customer/register" element={<CustomerRegister />} />
+      <Route path="/customer/products" element={
+        <ProtectedRoute allowedRoles={['customer']}>
+          <CustomerProducts />
+        </ProtectedRoute>
+      } />
+      <Route path="/customer/companies" element={
+        <ProtectedRoute allowedRoles={['customer']}>
+          <CustomerCompanies />
+        </ProtectedRoute>
+      } />
+      <Route path="/customer/feedback/:productId" element={
+        <ProtectedRoute allowedRoles={['customer']}>
+          <CustomerFeedback />
+        </ProtectedRoute>
+      } />
+      <Route path="/customer/my-feedbacks" element={
+        <ProtectedRoute allowedRoles={['customer']}>
+          <CustomerMyFeedbacks />
+        </ProtectedRoute>
+      } />
+      
+      {/* Company Routes */}
+      <Route path="/company/login" element={<CompanyLogin />} />
+      <Route path="/company/register" element={<CompanyRegister />} />
+      <Route path="/company/dashboard" element={
+        <ProtectedRoute allowedRoles={['company']}>
+          <CompanyDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/company/feedbacks/:productId" element={
+        <ProtectedRoute allowedRoles={['company']}>
+          <CompanyFeedbacks />
+        </ProtectedRoute>
+      } />
+      
+      {/* Admin Routes */}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/dashboard" element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      } />
       
       {/* Catch-all route */}
       <Route path="*" element={<NotFound />} />
