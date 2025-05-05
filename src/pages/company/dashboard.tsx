@@ -1,6 +1,11 @@
+
 import { useEffect, useState } from 'react';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function CompanyDashboard() {
   const [products, setProducts] = useState([]);
@@ -10,8 +15,22 @@ export default function CompanyDashboard() {
   const [editId, setEditId] = useState<number|null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { isAuthenticated, userRole, logout } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const company = JSON.parse(localStorage.getItem('company') || '{}');
+
+  useEffect(() => {
+    // Check if user is authenticated as a company
+    if (!isAuthenticated || userRole !== 'company') {
+      navigate('/company/login');
+      return;
+    }
+    
+    fetchProducts();
+    // eslint-disable-next-line
+  }, [isAuthenticated, userRole, navigate]);
 
   const fetchProducts = () => {
     fetch('/api/products')
@@ -21,11 +40,6 @@ export default function CompanyDashboard() {
         setLoading(false);
       });
   };
-
-  useEffect(() => {
-    fetchProducts();
-    // eslint-disable-next-line
-  }, []);
 
   const handleAddOrEdit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,32 +94,36 @@ export default function CompanyDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-space-gradient text-white p-8">
-      <h2 className="text-3xl font-bold mb-6 text-purple-300">Company Dashboard</h2>
-      <form onSubmit={handleAddOrEdit} className="mb-8">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <Input placeholder="Product Name" value={name} onChange={e => setName(e.target.value)} />
-          <Input placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
-        </div>
-        {error && <div className="text-red-400 mb-2">{error}</div>}
-        {success && <div className="text-green-400 mb-2">{success}</div>}
-        <Button type="submit">{editId ? 'Update' : 'Add'} Product</Button>
-        {editId && <Button type="button" className="ml-2" onClick={() => { setEditId(null); setName(''); setDescription(''); }}>Cancel</Button>}
-      </form>
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product: any) => (
-            <div key={product.id} className="bg-space-dark/80 rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-semibold text-purple-200 mb-2">{product.name}</h3>
-              <p className="text-sm text-gray-300 mb-2">{product.description}</p>
-              <Button className="mr-2" onClick={() => handleEdit(product)}>Edit</Button>
-              <Button variant="destructive" onClick={() => handleDelete(product.id)}>Delete</Button>
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="min-h-screen bg-space-gradient text-white">
+      <Navbar userType={userRole} onLogout={logout} />
+      
+      <div className="p-8">
+        <h2 className="text-3xl font-bold mb-6 text-purple-300">Company Dashboard</h2>
+        <form onSubmit={handleAddOrEdit} className="mb-8">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <Input placeholder="Product Name" value={name} onChange={e => setName(e.target.value)} />
+            <Input placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
+          </div>
+          {error && <div className="text-red-400 mb-2">{error}</div>}
+          {success && <div className="text-green-400 mb-2">{success}</div>}
+          <Button type="submit">{editId ? 'Update' : 'Add'} Product</Button>
+          {editId && <Button type="button" className="ml-2" onClick={() => { setEditId(null); setName(''); setDescription(''); }}>Cancel</Button>}
+        </form>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product: any) => (
+              <div key={product.id} className="bg-space-dark/80 rounded-lg shadow-lg p-6">
+                <h3 className="text-xl font-semibold text-purple-200 mb-2">{product.name}</h3>
+                <p className="text-sm text-gray-300 mb-2">{product.description}</p>
+                <Button className="mr-2" onClick={() => handleEdit(product)}>Edit</Button>
+                <Button variant="destructive" onClick={() => handleDelete(product.id)}>Delete</Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
-} 
+}
